@@ -1,21 +1,15 @@
 {
   "name": "Web Push Demo",
-  "description": "Los gezellegitos",
-  "launch_path": "/push.html",
+  "description": "KaiOS Demo",
+  "launch_path": "/index.html",
   "icons": {
     "128": "/icons/icon-128.png"
   },
   "developer": {
-    "name": "Awesome Apps(tm)",
-    "url": "http://telenor.com"
+    "name": "KaiOS Apps"
   },
   "permissions": {
     "push": {"description": "To receive notifications"},
     "desktop-notification": {}
-  },
-  "messages": [
-    {"push": "/push.html"},
-    {"push-register": "/push.html"},
-    {"notification":"/push.html"}
-  ]
+  }
 }
