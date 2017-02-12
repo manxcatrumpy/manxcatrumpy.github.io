@@ -25,27 +25,32 @@ self.addEventListener('push', function(event) {
   var title = 'Yay a message.';
   var body;
   if (event.data) {
-    body = event.data.text();//'We have received a push message.';
+    body = event.data.text();
   } else {
     body = 'We have received a push notification.';
   }
   var icon = '/images/icon-192x192.png';
   var tag = 'simple-push-demo-notification-tag';
 
-  event.waitUntil(
+  event.waitUntil(clients.matchAll({
+    type: 'window'
+  }).then(function(clientList) {
+    for (var i = 0; i < clientList.length; i++) {
+      var client = clientList[i];
+      return client.postMessage('push event from SW');
+    }
     self.registration.showNotification(title, {
       body: body,
       icon: icon,
       data: body,
       tag: tag
     })
-  );
+  }));
 });
 
 self.addEventListener('notificationclick', function(event) {
   event.notification.close();
-  // This looks to see if the current is already open and
-  // focuses if it is
+  // This looks to see if the current is already open
   event.waitUntil(clients.matchAll({
     type: 'window'
   }).then(function(clientList) {
@@ -54,8 +59,8 @@ self.addEventListener('notificationclick', function(event) {
       return client.postMessage('click event from SW');
     }
   },
-  function(error){
-    console.log("Get client error= " + JSON.stringify(error));
-  }));
-
+    function(error){
+      console.log("Get client error= " + JSON.stringify(error));
+    })
+  );
 });
