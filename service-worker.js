@@ -50,17 +50,5 @@ self.addEventListener('push', function(event) {
 
 self.addEventListener('notificationclick', function(event) {
   event.notification.close();
-  // This looks to see if the current is already open
-  event.waitUntil(clients.matchAll({
-    type: 'window'
-  }).then(function(clientList) {
-    for (var i = 0; i < clientList.length; i++) {
-      var client = clientList[i];
-      return client.postMessage('click event from SW');
-    }
-  },
-    function(error){
-      console.log("Get client error= " + JSON.stringify(error));
-    })
-  );
+  console.log("Notification Click");
 });
