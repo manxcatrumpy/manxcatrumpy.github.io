@@ -11,7 +11,7 @@ self.addEventListener('activate', function(event) {
       // This will trigger navigator.serviceWorker.onmessage in each client.
       return self.clients.matchAll().then(function(clients) {
         return Promise.all(clients.map(function(client) {
-          return client.postMessage('The service worker has activated and ' + 
+          return client.postMessage('The service worker has activated and ' +
             'taken control.');
         }));
       });
@@ -50,6 +50,22 @@ self.addEventListener('push', function(event) {
   }));
 });
 
+self.addEventListener('pushsubscriptionchange', e => {
+  console.log('Subscription expired');
+  var _applicationKeys = {
+    publicKey: base64UrlToUint8Array(
+      'BIuoU7oJ1yjSv9081Kw2tpN10y6Zi3U7OQnHrbssrkVP8z1igHjKFfwQFNl1MnLBXvwyNMNulq-_nBdXzujrxUc'),
+  };
+  e.waitUntil(registration.pushManager.subscribe({
+      userVisibleOnly: true,
+      applicationServerKey: _applicationKeys.publicKey,
+    })
+    .then(subscription => {
+      // TODO: Send new subscription to application server
+      console.log("subscription: " + JSON.stringify(subscription.toJSON()));
+    }));
+});
+
 self.addEventListener('notificationclick', function(event) {
   event.notification.close();
   console.log("Notification Click");
@@ -62,3 +78,19 @@ self.addEventListener('notificationclick', function(event) {
     clients.openApp();
   }
 });
+
+// Converts the URL-safe base64 encoded |base64UrlData| to an Uint8Array buffer.
+function base64UrlToUint8Array(base64UrlData) {
+  const padding = '='.repeat((4 - base64UrlData.length % 4) % 4);
+  const base64 = (base64UrlData + padding)
+    .replace(/\-/g, '+')
+    .replace(/_/g, '/');
+
+  const rawData = self.atob(base64);
+  const buffer = new Uint8Array(rawData.length);
+
+  for (let i = 0; i < rawData.length; ++i) {
+    buffer[i] = rawData.charCodeAt(i);
+  }
+  return buffer;
+}
