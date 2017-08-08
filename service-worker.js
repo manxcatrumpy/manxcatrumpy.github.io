@@ -57,7 +57,6 @@ self.addEventListener('pushsubscriptionchange', e => {
       'BIuoU7oJ1yjSv9081Kw2tpN10y6Zi3U7OQnHrbssrkVP8z1igHjKFfwQFNl1MnLBXvwyNMNulq-_nBdXzujrxUc'),
   };
   e.waitUntil(registration.pushManager.subscribe({
-      userVisibleOnly: true,
       applicationServerKey: _applicationKeys.publicKey,
     })
     .then(subscription => {

@@ -47,7 +47,6 @@ function register() {
     .then((serviceWorkerRegistration) => {
         return serviceWorkerRegistration.pushManager.subscribe(
           {
-            userVisibleOnly: true,
             applicationServerKey: _applicationKeys.publicKey,
           }
         );
