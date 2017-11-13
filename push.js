@@ -7,9 +7,11 @@ var _applicationKeys = {
         'iZoUhDqh5xHLHlO5zTWUOk64UMHFUmLrFQxiTNNNqRo'),
 };
 
-navigator.mozSetMessageHandler('serviceworker-notification', function(m) {
-  console.log('Push notification = ' + m.msg);
-});
+if ('mozSetMessageHandler' in navigator) {
+  navigator.mozSetMessageHandler('serviceworker-notification', function(m) {
+    console.log('Push notification = ' + m.msg);
+  });
+}
 
 window.addEventListener('load', function() {
   
@@ -42,14 +44,30 @@ window.addEventListener('load', function() {
 });
 
 function register() {
-
   navigator.serviceWorker.ready
     .then((serviceWorkerRegistration) => {
-        return serviceWorkerRegistration.pushManager.subscribe(
-          {
-            applicationServerKey: _applicationKeys.publicKey,
-          }
-        );
+        return serviceWorkerRegistration.pushManager.getSubscription()
+                 .then(subscription => {
+                   if (subscription) {
+                       if (!subscription.options.applicationServerKey) {
+                         return subscription.unsubscribe().then(function(successful) {
+                          return serviceWorkerRegistration.pushManager.subscribe(
+                            {
+                              applicationServerKey: _applicationKeys.publicKey,
+                            });
+                          }).catch(function(e) {
+                            return Promise.reject(e);
+                          });
+                       } else {
+                        return Promise.resolve(subscription);
+                       }
+                   } else {
+                    return serviceWorkerRegistration.pushManager.subscribe(
+                      {
+                        applicationServerKey: _applicationKeys.publicKey,
+                      });
+                   }
+                 });
       })
       .then((subscription) => {
         console.debug("subscription: " + JSON.stringify(subscription));
@@ -57,6 +75,23 @@ function register() {
       .catch((subscriptionErr) => {
          console.debug("subscriptionErr: "  + subscriptionErr);
       });
+}
+
+function registerWithoutKey() {
+  navigator.serviceWorker.ready
+  .then((serviceWorkerRegistration) => {
+      return serviceWorkerRegistration.pushManager.subscribe(
+        {
+          userVisibleOnly: true,
+        }
+      );
+    })
+    .then((subscription) => {
+      console.debug("subscription without key: " + JSON.stringify(subscription));
+    })
+    .catch((subscriptionErr) => {
+       console.debug("subscription without key Err: "  + subscriptionErr);
+    });
 }
 
 function initialiseState(reg) {
@@ -72,6 +107,11 @@ function initialiseState(reg) {
           return;  
         }
         console.log("subscription: " + JSON.stringify(subscription.toJSON()));
+        if (subscription.options.applicationServerKey) {
+          console.log("It is a VAPID subscription");
+        } else {
+          console.log("It is a non-VAPID subscription");
+        }
       })  
       .catch(function(err) {  
         console.log('Error during getSubscription()', err);  
