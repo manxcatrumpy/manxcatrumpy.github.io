@@ -1,5 +1,12 @@
 /* eslint-env browser */
 
+// VAPID private key is 'iZoUhDqh5xHLHlO5zTWUOk64UMHFUmLrFQxiTNNNqRo'
+// Above private key is for dev usage, please don'leave private key for release app
+var applicationKeys = {
+  publicKey: base64UrlToUint8Array(
+    'BIuoU7oJ1yjSv9081Kw2tpN10y6Zi3U7OQnHrbssrkVP8z1igHjKFfwQFNl1MnLBXvwyNMNulq-_nBdXzujrxUc'),
+};
+
 function uint8ArrayToBase64Url(uint8Array, start, end) {
   start = start || 0;
   end = end || uint8Array.byteLength;

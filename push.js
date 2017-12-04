@@ -1,12 +1,5 @@
 var registerBtn = document.querySelector('#register button');
 
-var _applicationKeys = {
-      publicKey: window.base64UrlToUint8Array(
-        'BIuoU7oJ1yjSv9081Kw2tpN10y6Zi3U7OQnHrbssrkVP8z1igHjKFfwQFNl1MnLBXvwyNMNulq-_nBdXzujrxUc'),
-      privateKey: window.base64UrlToUint8Array(
-        'iZoUhDqh5xHLHlO5zTWUOk64UMHFUmLrFQxiTNNNqRo'),
-};
-
 if ('mozSetMessageHandler' in navigator) {
   navigator.mozSetMessageHandler('serviceworker-notification', function(m) {
     console.log('Push notification = ' + m.msg);
@@ -53,7 +46,7 @@ function register() {
                          return subscription.unsubscribe().then(function(successful) {
                           return serviceWorkerRegistration.pushManager.subscribe(
                             {
-                              applicationServerKey: _applicationKeys.publicKey,
+                              applicationServerKey: applicationKeys.publicKey,
                             });
                           }).catch(function(e) {
                             return Promise.reject(e);
@@ -64,7 +57,7 @@ function register() {
                    } else {
                     return serviceWorkerRegistration.pushManager.subscribe(
                       {
-                        applicationServerKey: _applicationKeys.publicKey,
+                        applicationServerKey: applicationKeys.publicKey,
                       });
                    }
                  });
