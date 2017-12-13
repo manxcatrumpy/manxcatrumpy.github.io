@@ -41,12 +41,18 @@ self.addEventListener('push', function(event) {
       var client = clientList[i];
       return client.postMessage('push event from SW');
     }
-    self.registration.showNotification(title, {
+    let notificationOptions = {
       body: body,
       icon: icon,
       data: data,
       tag: tag
-    })
+    };
+    if (isInteractiveNotification) {
+      notificationOptions.requireInteraction = true;
+      notificationOptions.actions = [{action: 'answer', title: 'Answer'},
+                                     {action: 'decline', title: 'Decline'}];
+    }
+    self.registration.showNotification(title, notificationOptions);
   }));
 });
 
@@ -63,7 +69,7 @@ self.addEventListener('pushsubscriptionchange', e => {
 
 self.addEventListener('notificationclick', function(event) {
   event.notification.close();
-  console.log("Notification Click");
+  console.log("Notification Click, action: " + event.action);
   if (event.notification.data.msg != undefined) {
     var openAppEvent = {
       msg: event.notification.data.msg
