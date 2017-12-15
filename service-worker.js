@@ -71,12 +71,16 @@ self.addEventListener('pushsubscriptionchange', e => {
 self.addEventListener('notificationclick', function(event) {
   event.notification.close();
   console.log("Notification Click, action: " + event.action);
-  if (event.notification.data.msg != undefined) {
-    var openAppEvent = {
-      msg: event.notification.data.msg
+  if ('openApp' in clients ) {
+    if (event.notification.data.msg != undefined) {
+      var openAppEvent = {
+        msg: event.notification.data.msg
+      }
+      clients.openApp(openAppEvent);
+    } else {
+      clients.openApp();
     }
-    clients.openApp(openAppEvent);
   } else {
-    clients.openApp();
+    clients.openWindow('./');
   }
 });
