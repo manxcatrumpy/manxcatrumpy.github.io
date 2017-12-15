@@ -46,6 +46,7 @@ function register() {
                          return subscription.unsubscribe().then(function(successful) {
                           return serviceWorkerRegistration.pushManager.subscribe(
                             {
+                              userVisibleOnly: true,
                               applicationServerKey: applicationKeys.publicKey,
                             });
                           }).catch(function(e) {
