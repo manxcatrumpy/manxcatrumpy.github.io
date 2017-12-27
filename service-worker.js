@@ -59,6 +59,7 @@ self.addEventListener('push', function(event) {
 self.addEventListener('pushsubscriptionchange', e => {
   console.log('Subscription expired');
   e.waitUntil(registration.pushManager.subscribe({
+      userVisibleOnly: true,
       applicationServerKey: applicationKeys.publicKey,
     })
     .then(subscription => {
