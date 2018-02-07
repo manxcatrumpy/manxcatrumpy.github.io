@@ -1,0 +1,11 @@
+{
+  "name": "Web Storage Test",
+  "description": "Andy Test",
+  "launch_path": "/index.html",
+  "icons": {
+    "128": "/icons/icon-128.png"
+  },
+  "developer": {
+    "name": "Andy Test Apps"
+  },
+}
