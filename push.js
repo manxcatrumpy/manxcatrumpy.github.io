@@ -39,53 +39,20 @@ window.addEventListener('load', function() {
 function register() {
   navigator.serviceWorker.ready
     .then((serviceWorkerRegistration) => {
-        return serviceWorkerRegistration.pushManager.getSubscription()
-                 .then(subscription => {
-                   if (subscription) {
-                       if (!subscription.options.applicationServerKey) {
-                         return subscription.unsubscribe().then(function(successful) {
-                          return serviceWorkerRegistration.pushManager.subscribe(
-                            {
-                              userVisibleOnly: true,
-                              applicationServerKey: applicationKeys.publicKey,
-                            });
-                          }).catch(function(e) {
-                            return Promise.reject(e);
-                          });
-                       } else {
-                        return Promise.resolve(subscription);
-                       }
-                   } else {
-                    return serviceWorkerRegistration.pushManager.subscribe(
-                      {
-                        userVisibleOnly: true,
-                        applicationServerKey: applicationKeys.publicKey,
-                      });
-                   }
-                 });
-      })
-      .then((subscription) => {
-        console.debug("subscription: " + JSON.stringify(subscription));
-      })
-      .catch((subscriptionErr) => {
-         console.debug("subscriptionErr: "  + subscriptionErr);
+      return serviceWorkerRegistration.pushManager.subscribe({
+        userVisibleOnly: true,
+        applicationServerKey: applicationKeys.publicKey,
       });
-}
-
-function registerWithoutKey() {
-  navigator.serviceWorker.ready
-  .then((serviceWorkerRegistration) => {
-      return serviceWorkerRegistration.pushManager.subscribe(
-        {
-          userVisibleOnly: true,
-        }
-      );
     })
     .then((subscription) => {
-      console.debug("subscription without key: " + JSON.stringify(subscription));
+      if (subscription.options.applicationServerKey) {
+        var keyArray = new Uint8Array(subscription.options.applicationServerKey);
+        console.debug("subscribe with key: " + uint8ArrayToBase64Url(keyArray));
+      }
+      console.debug("Push subscription: " + JSON.stringify(subscription));
     })
     .catch((subscriptionErr) => {
-       console.debug("subscription without key Err: "  + subscriptionErr);
+      console.debug("subscriptionErr: " + subscriptionErr);
     });
 }
 

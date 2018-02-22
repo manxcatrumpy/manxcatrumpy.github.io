@@ -20,7 +20,7 @@ self.addEventListener('activate', function(event) {
 });
 
 self.addEventListener('push', function(event) {
-  console.log('Received a push message', event);
+  console.log('Received a push notification');
 
   var title = 'Yay a message.';
   var body;
@@ -28,11 +28,15 @@ self.addEventListener('push', function(event) {
   if (event.data != undefined) {
     body = event.data.text();
     data.msg = body;
+    console.log('with message: ' + event.data.text());
   } else {
     body = 'We have received a push notification.';
   }
   var icon = '/images/icon-192x192.png';
-  var tag = 'simple-push-demo-notification-tag';
+  var tag;
+  if (showNotificationWithTag) {
+    tag = 'simple-push-demo-notification-tag';
+  }
 
   event.waitUntil(clients.matchAll({
     type: 'window'

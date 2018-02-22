@@ -1,5 +1,7 @@
 {
   "name": "Web Push Demo",
+  "type": "privileged",
+  "origin": "app://push.kaiostech.com",
   "description": "KaiOS Demo",
   "launch_path": "/index.html",
   "icons": {
