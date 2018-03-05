@@ -7,7 +7,7 @@ var applicationKeys = {
     'BIuoU7oJ1yjSv9081Kw2tpN10y6Zi3U7OQnHrbssrkVP8z1igHjKFfwQFNl1MnLBXvwyNMNulq-_nBdXzujrxUc'),
 };
 
-const showNotificationWithTag = false;
+const showNotificationWithTag = true;
 const isInteractiveNotification = false;
 
 function uint8ArrayToBase64Url(uint8Array, start, end) {
