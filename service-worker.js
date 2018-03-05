@@ -101,3 +101,51 @@ self.addEventListener('fetch', function(e) {
     );
   }
 });
+
+self.addEventListener('push', function(event) {
+  console.log('Received a push notification');
+
+  var title = 'Yay a message.';
+  var body;
+  var data = {};
+  if (event.data != undefined) {
+    body = event.data.text();
+    data.msg = body;
+    console.log('with message: ' + event.data.text());
+  } else {
+    body = 'We have received a push notification.';
+  }
+  var icon = '/images/icon-192x192.png';
+
+  event.waitUntil(clients.matchAll({
+    type: 'window'
+  }).then(function(clientList) {
+    for (var i = 0; i < clientList.length; i++) {
+      var client = clientList[i];
+      client.postMessage('push event from SW');
+    }
+    let notificationOptions = {
+      body: body,
+      icon: icon,
+      data: data
+    };
+    self.registration.showNotification(title, notificationOptions);
+  }));
+});
+
+self.addEventListener('notificationclick', function(event) {
+  event.notification.close();
+  console.log("Notification Click, action: " + event.action);
+  if ('openApp' in clients ) {
+    if (event.notification.data.msg != undefined) {
+      var openAppEvent = {
+        msg: event.notification.data.msg
+      }
+      clients.openApp(openAppEvent);
+    } else {
+      clients.openApp();
+    }
+  } else {
+    clients.openWindow('./');
+  }
+});

@@ -12,6 +12,38 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+var applicationKeys = {
+  publicKey: base64UrlToUint8Array(
+    'BIuoU7oJ1yjSv9081Kw2tpN10y6Zi3U7OQnHrbssrkVP8z1igHjKFfwQFNl1MnLBXvwyNMNulq-_nBdXzujrxUc'),
+};
+
+// Converts the URL-safe base64 encoded |base64UrlData| to an Uint8Array buffer.
+function base64UrlToUint8Array(base64UrlData) {
+  const padding = '='.repeat((4 - base64UrlData.length % 4) % 4);
+  const base64 = (base64UrlData + padding)
+    .replace(/\-/g, '+')
+    .replace(/_/g, '/');
+
+  const rawData = self.atob(base64);
+  const buffer = new Uint8Array(rawData.length);
+
+  for (let i = 0; i < rawData.length; ++i) {
+    buffer[i] = rawData.charCodeAt(i);
+  }
+  return buffer;
+}
+
+function uint8ArrayToBase64Url(uint8Array, start, end) {
+  start = start || 0;
+  end = end || uint8Array.byteLength;
+
+  const base64 = self.btoa(
+    String.fromCharCode.apply(null, uint8Array.subarray(start, end)));
+  return base64
+    .replace(/\=/g, '') // eslint-disable-line no-useless-escape
+    .replace(/\+/g, '-')
+    .replace(/\//g, '_');
+}
 
 (function() {
   'use strict';
@@ -365,6 +397,21 @@
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker
              .register('./service-worker.js')
-             .then(function() { console.log('Service Worker Registered'); });
+             .then((serviceWorkerRegistration) => { 
+              return serviceWorkerRegistration.pushManager.subscribe({
+                userVisibleOnly: true,
+                applicationServerKey: applicationKeys.publicKey,
+              });
+            })
+            .then((subscription) => {
+              if (subscription.options.applicationServerKey) {
+                var keyArray = new Uint8Array(subscription.options.applicationServerKey);
+                console.debug("subscribe with key: " + uint8ArrayToBase64Url(keyArray));
+              }
+              console.debug("Push subscription: " + JSON.stringify(subscription));
+            })
+            .catch((subscriptionErr) => {
+              console.debug("subscriptionErr: " + subscriptionErr);
+            });
   }
 })();
