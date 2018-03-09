@@ -136,7 +136,16 @@ self.addEventListener('push', function(event) {
 self.addEventListener('notificationclick', function(event) {
   event.notification.close();
   console.log("Notification Click, action: " + event.action);
-  if ('openApp' in clients ) {
+  if ('openWindow' in clients ) {
+    clients.openWindow('./test').then(function(WindowClient) {
+      if (WindowClient) {
+        console.log('WindowClient:' + WindowClient.url);
+        WindowClient.postMessage('openWindow event from SW, msg: ' + event.notification.data.msg);
+      } else {
+        console.log("no windowClient");
+      }
+    });
+  } else {
     if (event.notification.data.msg != undefined) {
       var openAppEvent = {
         msg: event.notification.data.msg
@@ -145,7 +154,5 @@ self.addEventListener('notificationclick', function(event) {
     } else {
       clients.openApp();
     }
-  } else {
-    clients.openWindow('./');
   }
 });
