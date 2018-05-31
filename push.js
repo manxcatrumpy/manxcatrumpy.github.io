@@ -1,3 +1,4 @@
+var versionText = document.getElementById('version');
 var registerBtn = document.querySelector('#register button');
 
 if ('mozSetMessageHandler' in navigator) {
@@ -7,7 +8,8 @@ if ('mozSetMessageHandler' in navigator) {
 }
 
 window.addEventListener('load', function() {
-  
+  versionText.textContent = version;
+  console.log('W3C Push Demo App version ' + version);
   registerBtn.addEventListener('click', function() {
     register();
   });
@@ -86,6 +88,10 @@ window.addEventListener('keydown', function(event) {
   switch (event.key) {
     case 'SoftRight':
       register();
+      break;
+    case 'Backspace':
+    case 'EndCall':
+      window.close();
       break;
   }
 });
