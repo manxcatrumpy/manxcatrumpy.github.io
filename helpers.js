@@ -7,7 +7,7 @@ var applicationKeys = {
     'BIuoU7oJ1yjSv9081Kw2tpN10y6Zi3U7OQnHrbssrkVP8z1igHjKFfwQFNl1MnLBXvwyNMNulq-_nBdXzujrxUc'),
 };
 
-const version = 'v1.0';
+const version = 'v1.1';
 const showNotificationWithTag = true;
 const isInteractiveNotification = false;
 

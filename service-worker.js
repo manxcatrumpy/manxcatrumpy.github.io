@@ -43,7 +43,7 @@ self.addEventListener('push', function(event) {
   }).then(function(clientList) {
     for (var i = 0; i < clientList.length; i++) {
       var client = clientList[i];
-      return client.postMessage('push event from SW');
+      client.postMessage('push event from SW');
     }
     let notificationOptions = {
       body: body,
