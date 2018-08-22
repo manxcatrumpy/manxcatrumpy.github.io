@@ -89,9 +89,5 @@ window.addEventListener('keydown', function(event) {
     case 'SoftRight':
       register();
       break;
-    case 'Backspace':
-    case 'EndCall':
-      window.close();
-      break;
   }
 });
