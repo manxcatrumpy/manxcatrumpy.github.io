@@ -85,6 +85,6 @@ self.addEventListener('notificationclick', function(event) {
       clients.openApp();
     }
   } else {
-    clients.openWindow('./');
+    clients.openWindow('/index.html');
   }
 });
