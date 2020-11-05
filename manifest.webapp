@@ -1,8 +1,7 @@
 {
-  "name": "Web Push Demo",
+  "name": "webpush",
   "type": "privileged",
-  "origin": "app://push.kaiostech.com",
-  "description": "KaiOS Demo",
+  "description": "KaiOS Web Push Demo",
   "launch_path": "/index.html",
   "icons": {
     "128": "/icons/icon-128.png"
@@ -10,11 +9,9 @@
   "developer": {
     "name": "KaiOS Apps"
   },
-  "permissions": {
-    "serviceworker": {},
-    "desktop-notification": {}
-  },
-  "messages": [
-    {"serviceworker-notification": "/index.html"}
-  ]
+  "b2g_features": {
+    "permissions": {
+      "desktop-notification": {}
+    }
+  }
 }
