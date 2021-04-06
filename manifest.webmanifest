@@ -11,7 +11,6 @@
       "sizes": "128x128"
     }
   ],
-  "display": "browser",
   "orientation": "natural",
   "start_url": "/index.html",
   "developer": {
