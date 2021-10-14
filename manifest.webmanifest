@@ -16,6 +16,7 @@
   "developer": {
     "name": "KaiOS Apps"
   },
+  "display": "browser",
   "b2g_features": {
     "version": "1.0",
     "permissions": {
