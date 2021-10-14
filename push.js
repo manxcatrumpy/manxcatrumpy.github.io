@@ -87,7 +87,8 @@ function initialiseState(reg) {
 window.addEventListener('keydown', function(event) {
   switch (event.key) {
     case 'SoftRight':
-      register();
+      location.href = "./test";
+      //register();
       break;
     case 'Backspace':
     case 'EndCall':
